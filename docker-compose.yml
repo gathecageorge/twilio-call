@@ -1,0 +1,31 @@
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100m
+      max-file: "3"
+      tag: '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
+
+services:
+  twilio-app:
+    restart: "unless-stopped"
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - APP_VERSION=${APP_VERSION:-latest}
+    image: twilio-app:local
+    pull_policy: never
+    environment:
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - FROM_NUMBER=${FROM_NUMBER}
+    volumes:
+      - ./app.py:/src/app.py
+      - twilio-data:/data
+    ports:
+      - 5051:5051
+    <<: *logging
+
+volumes:
+  twilio-data:
