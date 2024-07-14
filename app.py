@@ -20,7 +20,7 @@ def index():
     version = os.environ["APP_VERSION"]
     return f"<h1>This is Twilio app version: {version}!</h1>"
 
-@app.route('/get/<key>', methods=['GET'])
+@app.route('/get/<key>', methods=['GET', 'POST'])
 def get_value(key):
   json_data = json.loads(retrieve_data(key))
 
