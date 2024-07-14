@@ -7,6 +7,18 @@ x-logging: &logging
       tag: '{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}'
 
 services:
+  redis-gui:
+    image: "redis/redisinsight:latest"
+    ports:
+      - 5540:5540
+    <<: *logging
+  
+  redis-alpine:
+    image: "redis:alpine"
+    volumes:
+      - redis-data:/data
+    <<: *logging
+  
   twilio-app:
     restart: "unless-stopped"
     build:
@@ -29,3 +41,4 @@ services:
 
 volumes:
   twilio-data:
+  redis-data:
