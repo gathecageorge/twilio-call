@@ -8,12 +8,14 @@ x-logging: &logging
 
 services:
   redis-gui:
+    restart: "unless-stopped"
     image: "redis/redisinsight:latest"
     ports:
       - 5540:5540
     <<: *logging
   
   redis-alpine:
+    restart: "unless-stopped"
     image: "redis:alpine"
     volumes:
       - redis-data:/data
@@ -33,6 +35,7 @@ services:
       - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
       - FROM_NUMBER=${FROM_NUMBER}
       - ESCALATE_USERS=${ESCALATE_USERS}
+      - DOMAIN=${DOMAIN}
     volumes:
       - ./app.py:/src/app.py
       - twilio-data:/data
